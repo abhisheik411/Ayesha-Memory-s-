@@ -2,122 +2,88 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Ayesha Digital Photo Album - Fast Gallery</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #fff;
             min-height: 100vh;
-            padding: 30px 20px;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(0, 123, 255, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
+            padding: 20px 15px;
         }
 
         #header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             position: relative;
             z-index: 1;
-            animation: fadeInDown 0.8s ease-out;
         }
 
         #header h1 {
-            font-size: 3rem;
+            font-size: clamp(1.5rem, 8vw, 3rem);
             background: linear-gradient(135deg, #fff 0%, #007bff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
         }
 
         #header p {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
+            font-size: clamp(0.8rem, 4vw, 1rem);
         }
 
         #page-controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 25px;
-            margin-bottom: 40px;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
             position: relative;
             z-index: 1;
         }
 
         button {
-            padding: 12px 28px;
+            padding: 10px 20px;
             background: linear-gradient(135deg, #007bff, #0056b3);
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
+            min-height: 44px;
+            min-width: 44px;
+            touch-action: manipulation;
         }
 
         button:active:not(:disabled) {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
         button:disabled {
             background: linear-gradient(135deg, #555, #333);
             cursor: not-allowed;
             opacity: 0.5;
-            transform: none;
         }
 
         #page-counter {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: bold;
             background: rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 50px;
             backdrop-filter: blur(10px);
             letter-spacing: 1px;
@@ -125,55 +91,35 @@
 
         #grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
-            animation: fadeInUp 0.8s ease-out;
         }
 
         .thumbnail-wrapper {
             position: relative;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
             background: rgba(255, 255, 255, 0.05);
             aspect-ratio: 1;
+            cursor: pointer;
         }
 
-        .thumbnail-wrapper:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 123, 255, 0.3);
+        .thumbnail-wrapper:active {
+            transform: scale(0.98);
         }
 
         .thumbnail {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            cursor: pointer;
-            transition: all 0.4s ease;
             display: block;
-        }
-
-        .thumbnail-wrapper::after {
-            content: '🔍';
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 5px 8px;
-            border-radius: 20px;
-            font-size: 12px;
-            opacity: 0;
             transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        .thumbnail-wrapper:hover::after {
-            opacity: 1;
         }
 
         .skeleton {
@@ -185,7 +131,7 @@
             background: linear-gradient(90deg, #2a2a3e 25%, #3a3a4e 50%, #2a2a3e 75%);
             background-size: 200% 100%;
             animation: loadingShimmer 1.5s infinite;
-            border-radius: 15px;
+            border-radius: 12px;
         }
 
         @keyframes loadingShimmer {
@@ -205,49 +151,52 @@
             align-items: center;
             justify-content: center;
             z-index: 2000;
-            animation: fadeIn 0.3s ease;
+            touch-action: pan-x pan-y;
         }
 
         #modal-image {
-            max-width: 90%;
-            max-height: 85vh;
+            max-width: 95%;
+            max-height: 80vh;
             object-fit: contain;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            animation: zoomIn 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         #modal-controls {
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 12px 25px;
-            border-radius: 60px;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-radius: 50px;
             backdrop-filter: blur(10px);
             z-index: 2001;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        #modal-controls button {
+            padding: 8px 16px;
+            font-size: 12px;
+            min-height: 40px;
         }
 
         #modal-close {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             background: #dc3545;
-            padding: 12px 20px;
+            padding: 8px 16px;
             z-index: 2001;
-        }
-
-        #modal-close:hover {
-            background: #c82333;
-            transform: scale(1.05);
+            min-width: 60px;
         }
 
         .empty-state {
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             margin: 40px auto;
@@ -255,90 +204,38 @@
         }
 
         .empty-state h3 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             margin-bottom: 15px;
             color: #007bff;
         }
 
         .empty-state p {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
+            font-size: 0.9rem;
+            word-break: break-word;
         }
 
         .loading-indicator {
             text-align: center;
             padding: 40px;
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: rgba(255, 255, 255, 0.7);
         }
 
-        .loading-indicator::after {
-            content: '...';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes zoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1a1a2e;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            border-radius: 10px;
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            background: rgba(220, 53, 69, 0.2);
+            border-radius: 12px;
+            margin: 20px;
+            color: #ff6b6b;
         }
 
         .image-count {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 25px;
             color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             position: relative;
             z-index: 1;
         }
@@ -349,19 +246,43 @@
         }
 
         @media (max-width: 768px) {
-            body { padding: 20px 15px; }
-            #header h1 { font-size: 2rem; }
-            #grid-container { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-            button { padding: 8px 20px; font-size: 14px; }
-            #page-counter { font-size: 1rem; padding: 8px 16px; }
-            #modal-controls { bottom: 20px; gap: 12px; padding: 8px 18px; }
-            #modal-controls button { padding: 8px 16px; font-size: 12px; }
-            #modal-close { top: 10px; right: 10px; padding: 8px 16px; }
+            #grid-container { 
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+                gap: 15px;
+            }
+            #modal-controls { 
+                bottom: 15px; 
+                gap: 10px; 
+                padding: 8px 15px;
+            }
+            #modal-controls button { 
+                padding: 6px 12px; 
+                font-size: 11px;
+            }
         }
 
         @media (max-width: 480px) {
-            #grid-container { grid-template-columns: 1fr; gap: 20px; }
-            #page-controls { gap: 15px; }
+            #grid-container { 
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+                gap: 12px;
+            }
+            #page-controls { 
+                gap: 10px;
+            }
+            button { 
+                padding: 8px 16px; 
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            #grid-container { 
+                grid-template-columns: 1fr 1fr; 
+                gap: 10px;
+            }
+            #header h1 { 
+                font-size: 1.3rem;
+            }
         }
     </style>
 </head>
@@ -371,20 +292,20 @@
         <p>Beautiful moments captured in time</p>
     </div>
     <div id="page-controls">
-        <button id="grid-prev">◀ Previous Page</button>
-        <div id="page-counter">Page 1 of 1</div>
-        <button id="grid-next">Next Page ▶</button>
+        <button id="grid-prev" aria-label="Previous Page">◀ Previous</button>
+        <div id="page-counter">Loading...</div>
+        <button id="grid-next" aria-label="Next Page">Next ▶</button>
     </div>
     <div id="grid-container"></div>
     <div class="image-count" id="total-count"></div>
 
     <div id="modal">
         <img id="modal-image" src="" alt="Gallery Image">
-        <button id="modal-close">✕ Close</button>
+        <button id="modal-close" aria-label="Close">✕ Close</button>
         <div id="modal-controls">
-            <button id="modal-prev">◀ Previous</button>
-            <button id="modal-download">💾 Download</button>
-            <button id="modal-next">Next ▶</button>
+            <button id="modal-prev" aria-label="Previous Image">◀ Prev</button>
+            <button id="modal-download" aria-label="Download Image">💾 Download</button>
+            <button id="modal-next" aria-label="Next Image">Next ▶</button>
         </div>
     </div>
 
@@ -395,9 +316,10 @@
         ];
         
         let validImages = [];
-        const IMAGES_PER_PAGE = 12; // Increased to 12 for better performance
+        const IMAGES_PER_PAGE = 12;
         let currentPage = 0;
         let modalIndex = 0;
+        let isLoading = false;
         
         const gridContainer = document.getElementById('grid-container');
         const modal = document.getElementById('modal');
@@ -411,49 +333,14 @@
         const gridNext = document.getElementById('grid-next');
         const totalCountSpan = document.getElementById('total-count');
 
-        // Optimized: Check images in parallel batches
-        async function filterExistingImagesParallel(imageList, batchSize = 20) {
-            const existingImages = [];
-            const totalImages = imageList.length;
-            
-            // Show initial loading message
-            gridContainer.innerHTML = `<div class="loading-indicator">Loading gallery (0/${totalImages})</div>`;
-            
-            // Process in batches for better performance
-            for (let i = 0; i < imageList.length; i += batchSize) {
-                const batch = imageList.slice(i, Math.min(i + batchSize, imageList.length));
-                
-                // Check all images in batch concurrently
-                const batchResults = await Promise.all(
-                    batch.map(imgPath => imageExists(imgPath))
-                );
-                
-                // Add valid images from this batch
-                batch.forEach((imgPath, idx) => {
-                    if (batchResults[idx]) {
-                        existingImages.push(imgPath);
-                    }
-                });
-                
-                // Update progress
-                const processed = Math.min(i + batchSize, totalImages);
-                gridContainer.innerHTML = `<div class="loading-indicator">Loading gallery (${processed}/${totalImages})<br>Found ${existingImages.length} images</div>`;
-                
-                // Small delay to keep UI responsive
-                await new Promise(resolve => setTimeout(resolve, 10));
-            }
-            
-            return existingImages;
-        }
-
-        // Optimized image existence check with timeout
+        // Optimized image existence check with better error handling
         function imageExists(url) {
             return new Promise((resolve) => {
                 const img = new Image();
                 const timeout = setTimeout(() => {
                     img.src = '';
                     resolve(false);
-                }, 2000); // 2 second timeout
+                }, 3000);
                 
                 img.onload = () => {
                     clearTimeout(timeout);
@@ -467,19 +354,50 @@
             });
         }
 
-        // Optimized rendering with skeleton loading
+        // Filter images with progress tracking
+        async function filterExistingImages(imageList, batchSize = 15) {
+            const existingImages = [];
+            const totalImages = imageList.length;
+            
+            gridContainer.innerHTML = `<div class="loading-indicator">📸 Loading ${totalImages} images...<br>Please wait</div>`;
+            
+            for (let i = 0; i < imageList.length; i += batchSize) {
+                const batch = imageList.slice(i, Math.min(i + batchSize, imageList.length));
+                const batchResults = await Promise.all(batch.map(imgPath => imageExists(imgPath)));
+                
+                batch.forEach((imgPath, idx) => {
+                    if (batchResults[idx]) {
+                        existingImages.push(imgPath);
+                    }
+                });
+                
+                const processed = Math.min(i + batchSize, totalImages);
+                if (gridContainer) {
+                    gridContainer.innerHTML = `<div class="loading-indicator">📸 Loading gallery...<br>${processed}/${totalImages} checked<br>Found ${existingImages.length} images</div>`;
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+            
+            return existingImages;
+        }
+
+        // Render grid with error handling
         function renderGrid() {
+            if (!gridContainer) return;
+            
             if (validImages.length === 0) {
                 gridContainer.innerHTML = `
                     <div class="empty-state">
                         <h3>📷 No Images Found</h3>
-                        <p>No valid images were found in the directory.<br>Please check if the image files exist.</p>
+                        <p>No valid images were found. Please make sure the image files exist in the same directory as this HTML file.</p>
+                        <p style="margin-top: 15px; font-size: 0.8rem;">💡 Tip: Check if the image files are in the correct location</p>
                     </div>
                 `;
                 pageCounter.textContent = `Page 0 of 0`;
                 gridPrev.disabled = true;
                 gridNext.disabled = true;
-                totalCountSpan.innerHTML = `📸 Valid Images: <span class="valid-count">0</span> | Total Checked: ${originalImages.length}`;
+                totalCountSpan.innerHTML = `📸 Valid Images: <span class="valid-count">0</span> | Checked: ${originalImages.length}`;
                 return;
             }
             
@@ -487,26 +405,28 @@
             const start = currentPage * IMAGES_PER_PAGE;
             const end = Math.min(start + IMAGES_PER_PAGE, validImages.length);
             
-            // Create skeleton loaders first
             for (let i = start; i < end; i++) {
                 const wrapper = document.createElement('div');
                 wrapper.classList.add('thumbnail-wrapper');
-                wrapper.style.position = 'relative';
                 
                 const skeleton = document.createElement('div');
                 skeleton.classList.add('skeleton');
                 
                 const thumb = document.createElement('img');
                 thumb.src = validImages[i];
-                thumb.alt = `Photo ${i + 1}`;
+                thumb.alt = `Memory ${i + 1}`;
                 thumb.classList.add('thumbnail');
                 thumb.loading = 'lazy';
                 thumb.style.opacity = '0';
-                thumb.style.position = 'relative';
-                thumb.style.zIndex = '1';
                 
                 thumb.onload = () => {
                     thumb.style.opacity = '1';
+                    if (skeleton && skeleton.parentNode) {
+                        skeleton.remove();
+                    }
+                };
+                
+                thumb.onerror = () => {
                     if (skeleton && skeleton.parentNode) {
                         skeleton.remove();
                     }
@@ -528,10 +448,9 @@
         }
 
         function openModal(index) {
-            if (validImages.length === 0) return;
+            if (validImages.length === 0 || !validImages[index]) return;
             modalIndex = index;
             modalImg.src = validImages[modalIndex];
-            modalDownload.download = validImages[modalIndex].split('/').pop();
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
@@ -545,16 +464,15 @@
             if (validImages.length === 0) return;
             modalIndex = (modalIndex + 1) % validImages.length;
             modalImg.src = validImages[modalIndex];
-            modalDownload.download = validImages[modalIndex].split('/').pop();
         }
 
         function prevModal() {
             if (validImages.length === 0) return;
             modalIndex = (modalIndex + validImages.length - 1) % validImages.length;
             modalImg.src = validImages[modalIndex];
-            modalDownload.download = validImages[modalIndex].split('/').pop();
         }
 
+        // Event handlers with touch support
         gridPrev.onclick = () => {
             if (currentPage > 0) {
                 currentPage--;
@@ -579,14 +497,17 @@
         modalNext.onclick = nextModal;
         
         modalDownload.onclick = function() {
-            if (validImages.length === 0) return;
-            const filename = validImages[modalIndex].replace('./', '').replace(/\.[^/.]+$/, ".jpg");
-            const a = document.createElement('a');
-            a.href = modalImg.src;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            if (validImages.length === 0 || !validImages[modalIndex]) return;
+            try {
+                const a = document.createElement('a');
+                a.href = modalImg.src;
+                a.download = validImages[modalIndex].split('/').pop() || 'image.jpg';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => document.body.removeChild(a), 100);
+            } catch (e) {
+                console.error('Download failed:', e);
+            }
         };
 
         document.onkeydown = (e) => {
@@ -597,31 +518,75 @@
             }
         };
 
-        // Cache valid images in localStorage for faster subsequent loads
+        // Touch swipe support for modal
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        modal.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        modal.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const swipeDistance = touchEndX - touchStartX;
+            if (Math.abs(swipeDistance) > 50) {
+                if (swipeDistance > 0) {
+                    prevModal();
+                } else {
+                    nextModal();
+                }
+            }
+        });
+
+        // Initialize gallery with error handling
         async function initializeGallery() {
-            // Check if we have cached results
-            const cached = localStorage.getItem('gallery_cache');
-            const cacheTime = localStorage.getItem('gallery_cache_time');
-            const now = Date.now();
-            
-            // Use cache if less than 1 hour old
-            if (cached && cacheTime && (now - parseInt(cacheTime)) < 3600000) {
-                validImages = JSON.parse(cached);
-                renderGrid();
-            } else {
-                // Load fresh
-                validImages = await filterExistingImagesParallel(originalImages, 25);
+            try {
+                // Check if localStorage is available
+                let useCache = false;
+                try {
+                    if (localStorage) useCache = true;
+                } catch(e) {
+                    console.log('localStorage not available');
+                }
                 
-                // Cache the results
-                localStorage.setItem('gallery_cache', JSON.stringify(validImages));
-                localStorage.setItem('gallery_cache_time', now.toString());
+                if (useCache) {
+                    const cached = localStorage.getItem('gallery_cache');
+                    const cacheTime = localStorage.getItem('gallery_cache_time');
+                    const now = Date.now();
+                    
+                    if (cached && cacheTime && (now - parseInt(cacheTime)) < 3600000) {
+                        validImages = JSON.parse(cached);
+                        if (validImages && validImages.length > 0) {
+                            renderGrid();
+                            return;
+                        }
+                    }
+                }
+                
+                validImages = await filterExistingImages(originalImages, 15);
+                
+                if (useCache && validImages && validImages.length > 0) {
+                    try {
+                        localStorage.setItem('gallery_cache', JSON.stringify(validImages));
+                        localStorage.setItem('gallery_cache_time', Date.now().toString());
+                    } catch(e) {
+                        console.log('Failed to cache images');
+                    }
+                }
                 
                 renderGrid();
+            } catch (error) {
+                console.error('Initialization error:', error);
+                gridContainer.innerHTML = `<div class="error-message">⚠️ Error loading gallery: ${error.message}<br>Please refresh the page or check console for details.</div>`;
             }
         }
         
-        // Start the gallery initialization
-        initializeGallery();
+        // Start the gallery with a slight delay to ensure DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeGallery);
+        } else {
+            initializeGallery();
+        }
     </script>
 </body>
 </html>
