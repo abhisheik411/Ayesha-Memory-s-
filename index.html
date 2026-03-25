@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Ayesha Digital Photo Album - Elegant Gallery</title>
+    <title>Ayesha Digital Photo Album - Fast Gallery</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,6 @@
             padding: 30px 20px;
         }
 
-        /* Animated Background */
         body::before {
             content: '';
             position: fixed;
@@ -32,7 +31,6 @@
             z-index: 0;
         }
 
-        /* Header Section */
         #header {
             text-align: center;
             margin-bottom: 40px;
@@ -56,7 +54,6 @@
             font-size: 1rem;
         }
 
-        /* Page Controls */
         #page-controls {
             display: flex;
             justify-content: center;
@@ -126,7 +123,6 @@
             letter-spacing: 1px;
         }
 
-        /* Grid Container */
         #grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -145,6 +141,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             transition: all 0.4s ease;
             background: rgba(255, 255, 255, 0.05);
+            aspect-ratio: 1;
         }
 
         .thumbnail-wrapper:hover {
@@ -154,7 +151,7 @@
 
         .thumbnail {
             width: 100%;
-            height: 280px;
+            height: 100%;
             object-fit: cover;
             cursor: pointer;
             transition: all 0.4s ease;
@@ -179,12 +176,16 @@
             opacity: 1;
         }
 
-        /* Loading State for Images */
-        .thumbnail-loading {
-            position: relative;
-            background: linear-gradient(90deg, #2a2a3e, #1a1a2e, #2a2a3e);
+        .skeleton {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #2a2a3e 25%, #3a3a4e 50%, #2a2a3e 75%);
             background-size: 200% 100%;
             animation: loadingShimmer 1.5s infinite;
+            border-radius: 15px;
         }
 
         @keyframes loadingShimmer {
@@ -192,24 +193,6 @@
             100% { background-position: -200% 0; }
         }
 
-        .thumbnail-error {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #2a2a3e;
-            color: #ff6b6b;
-            font-size: 14px;
-        }
-
-        .thumbnail-error::after {
-            content: '❌ Image not found';
-            position: absolute;
-            text-align: center;
-            padding: 10px;
-        }
-
-        /* Modal */
         #modal {
             position: fixed;
             top: 0;
@@ -262,7 +245,6 @@
             transform: scale(1.05);
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 80px 20px;
@@ -283,7 +265,6 @@
             font-size: 1rem;
         }
 
-        /* Loading Indicator */
         .loading-indicator {
             text-align: center;
             padding: 40px;
@@ -302,7 +283,6 @@
             60%, 100% { content: '...'; }
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -341,7 +321,6 @@
             }
         }
 
-        /* Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -355,73 +334,6 @@
             border-radius: 10px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #0056b3, #004085);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 20px 15px;
-            }
-
-            #header h1 {
-                font-size: 2rem;
-            }
-
-            #grid-container {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 20px;
-            }
-
-            .thumbnail {
-                height: 250px;
-            }
-
-            button {
-                padding: 8px 20px;
-                font-size: 14px;
-            }
-
-            #page-counter {
-                font-size: 1rem;
-                padding: 8px 16px;
-            }
-
-            #modal-controls {
-                bottom: 20px;
-                gap: 12px;
-                padding: 8px 18px;
-            }
-
-            #modal-controls button {
-                padding: 8px 16px;
-                font-size: 12px;
-            }
-
-            #modal-close {
-                top: 10px;
-                right: 10px;
-                padding: 8px 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            #grid-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .thumbnail {
-                height: 300px;
-            }
-
-            #page-controls {
-                gap: 15px;
-            }
-        }
-
-        /* Image Counter Badge */
         .image-count {
             text-align: center;
             margin-top: 30px;
@@ -436,9 +348,20 @@
             font-weight: bold;
         }
 
-        /* Smooth Transitions */
-        .thumbnail-wrapper, button, #modal-image {
-            will-change: transform;
+        @media (max-width: 768px) {
+            body { padding: 20px 15px; }
+            #header h1 { font-size: 2rem; }
+            #grid-container { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+            button { padding: 8px 20px; font-size: 14px; }
+            #page-counter { font-size: 1rem; padding: 8px 16px; }
+            #modal-controls { bottom: 20px; gap: 12px; padding: 8px 18px; }
+            #modal-controls button { padding: 8px 16px; font-size: 12px; }
+            #modal-close { top: 10px; right: 10px; padding: 8px 16px; }
+        }
+
+        @media (max-width: 480px) {
+            #grid-container { grid-template-columns: 1fr; gap: 20px; }
+            #page-controls { gap: 15px; }
         }
     </style>
 </head>
@@ -452,9 +375,7 @@
         <div id="page-counter">Page 1 of 1</div>
         <button id="grid-next">Next Page ▶</button>
     </div>
-    <div id="grid-container">
-        <div class="loading-indicator">Loading gallery</div>
-    </div>
+    <div id="grid-container"></div>
     <div class="image-count" id="total-count"></div>
 
     <div id="modal">
@@ -473,9 +394,8 @@
             './IMG_20250920_122728.jpg','./IMG_20250920_122811.jpg','./IMG_20250920_122831.jpg','./IMG_20250920_122938.jpg','./IMG_20250920_123115.jpg','./IMG_20250920_123301.jpg','./IMG_20250920_123407.jpg','./IMG_20250920_123559.jpg','./IMG_20250920_124514.jpg','./IMG_20250920_124519.jpg','./IMG_20250920_124525.jpg','./IMG_20250920_124537.jpg','./IMG_20250920_124611.jpg','./IMG_20250920_124619.jpg','./IMG_20250920_124637.jpg','./IMG_20250920_124650.jpg','./IMG_20250920_124654.jpg','./IMG_20250920_124743.jpg','./IMG_20250920_124748.jpg','./IMG_20250920_124819.jpg','./IMG_20250920_124829.jpg','./IMG_20250920_124850.jpg','./IMG_20250920_124920.jpg','./IMG_20250920_124926.jpg','./IMG_20250920_124930.jpg','./IMG_20250920_125003.jpg','./IMG_20250920_125039.jpg','./IMG_20250920_125109.jpg','./IMG_20250920_125114.jpg','./IMG_20250920_125630.jpg','./IMG_20250920_130837.jpg','./IMG_20250920_130900.jpg','./IMG_20250920_130903.jpg','./IMG_20250920_130907.jpg','./IMG_20250920_131012.jpg','./IMG_20250920_131018.jpg','./IMG_20250920_131057.jpg','./IMG_20250920_131102.jpg','./IMG_20250920_131115.jpg','./IMG_20250920_131119.jpg','./IMG_20250920_131132.jpg','./IMG_20250920_131216.jpg','./IMG_20250920_131546.jpg','./IMG_20250920_131600.jpg','./IMG_20250920_131714.jpg','./IMG_20250920_131719.jpg','./IMG_20250920_131729.jpg','./IMG_20250920_131735.jpg','./IMG_20250920_132519.jpg','./IMG_20250920_132612.jpg','./IMG_20250920_132647.jpg','./IMG_20250920_132648.jpg','./IMG_20250920_132657.jpg','./IMG_20250920_132702.jpg','./IMG_20250920_132717.jpg','./IMG_20250920_132723.jpg','./IMG_20250920_133301.jpg','./IMG_20250920_133549.jpg','./IMG_20250920_133553.jpg','./IMG_20250920_124422713_HDR.jpg','./IMG_20250920_124425747_HDR.jpg','./IMG_20250920_124527774.jpg','./IMG_20250920_124531482.jpg','./IMG_20250920_124625580.jpg','./IMG_20250920_124628592.jpg','./IMG_20250920_124630406.jpg','./IMG_20250920_124635725.jpg','./IMG_20250920_124636748.jpg','./IMG_20250920_124646077.jpg','./IMG_20250920_124650269.jpg','./IMG_20250920_124651693.jpg','./IMG_20250920_124653763.jpg','./IMG_20250920_124654981.jpg','./IMG_20250920_124723167.jpg','./IMG_20250920_124753059_HDR.jpg','./IMG_20250920_124754973.jpg','./IMG_20250920_124802763.jpg','./IMG_20250920_124832751_HDR.jpg','./IMG_20250920_125131976_HDR.jpg','./IMG_20250920_125143616_HDR.jpg','./IMG_20250920_125147912.jpg','./IMG_20250920_125150967_HDR.jpg','./IMG_20250920_125220894.jpg','./IMG_20250920_125227994.jpg','./IMG_20250920_125232099_HDR.jpg','./IMG_20250920_125305118_HDR.jpg','./IMG_20250920_125326004.jpg','./IMG_20250920_125328084.jpg','./IMG_20250920_125444894.jpg','./IMG_20250920_125447540_HDR.jpg','./IMG_20250920_125450065_HDR.jpg','./IMG_20250920_125455783_HDR.jpg','./IMG_20250920_125458546_HDR.jpg','./IMG_20250920_125515300_HDR.jpg','./IMG_20250920_125528228.jpg','./IMG_20250920_125533023.jpg','./IMG_20250920_125536442.jpg','./IMG_20250920_125541332.jpg','./IMG_20250920_125544433.jpg','./IMG_20250920_125618608.jpg','./IMG_20250920_125623801.jpg','./IMG_20250920_125632503.jpg','./IMG_20250920_125654562_HDR.jpg','./IMG_20250920_125706071.jpg','./IMG_20250920_125707929.jpg','./IMG_20250920_125716102.jpg','./IMG_20250920_125718525_HDR.jpg','./IMG_20250920_125744810_HDR.jpg','./IMG_20250920_125756587.jpg','./IMG_20250920_125820878.jpg','./IMG_20250920_125823599_HDR.jpg','./IMG_20250920_125828502_HDR.jpg','./IMG_20250920_125846337.jpg','./IMG_20250920_125849295.jpg','./IMG_20250920_125851681.jpg','./IMG_20250920_125905827.jpg','./IMG_20250920_125907551.jpg','./IMG_20250920_125923387.jpg','./IMG_20250920_125924868.jpg','./IMG_20250920_125926560.jpg','./IMG_20250920_125927566.jpg','./IMG_20250920_130049869_HDR.jpg','./IMG_20250920_130050964.jpg','./IMG_20250920_130100260_HDR.jpg','./IMG_20250920_130102181.jpg','./IMG_20250920_130103736.jpg','./IMG_20250920_132628887.jpg','./IMG_20250920_132632238.jpg','./IMG_20250920_132635577.jpg','./IMG_20250920_132637387.jpg','./IMG_20250920_132639088.jpg','./IMG_20250920_132652726.jpg','./IMG_20250920_132657287.jpg','./IMG_20250920_132659960.jpg','./IMG_20250920_132701846.jpg','./IMG_20250920_132704637.jpg','./IMG_20250920_132712217.jpg','./IMG_20250920_132716748_HDR.jpg','./IMG_20250920_132719290_HDR.jpg','./IMG_20250920_132728303_HDR.jpg','./IMG_20250920_132741166_HDR.jpg','./IMG_20250920_132744668_HDR.jpg','./IMG_20250920_132750922_HDR.jpg','./IMG_20250920_132828036.jpg','./IMG_20250920_132830230.jpg','./IMG_20250920_132835584.jpg','./IMG_20250920_132841727.jpg','./IMG_20250920_132847964.jpg','./IMG_20250920_132849875.jpg','./IMG_20250920_132851912.jpg','./IMG_20250920_132902750.jpg','./IMG_20250920_132904848.jpg','./IMG_20250920_132912475.jpg','./IMG_20250920_132915198.jpg','./IMG_20250920_132946448.jpg','./IMG_20250920_132948762.jpg','./IMG_20250920_132950571.jpg','./IMG_20250920_132953464.jpg','./IMG_20250920_133008171_HDR.jpg','./IMG_20250920_133010705_HDR.jpg','./IMG_20250920_133012677_HDR.jpg','./IMG_20250920_133040040.jpg','./WhatsApp Image 2026-03-25 at 7.40.21 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.38 PM (1).jpeg','./WhatsApp Image 2026-03-25 at 7.40.38 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.47 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.48 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.50 PM (1).jpeg','./WhatsApp Image 2026-03-25 at 7.40.50 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.51 PM (1).jpeg','./WhatsApp Image 2026-03-25 at 7.40.51 PM (2).jpeg','./WhatsApp Image 2026-03-25 at 7.40.51 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.52 PM (1).jpeg','./WhatsApp Image 2026-03-25 at 7.40.52 PM (2).jpeg','./WhatsApp Image 2026-03-25 at 7.40.52 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.53 PM (1).jpeg','./WhatsApp Image 2026-03-25 at 7.40.53 PM (2).jpeg','./WhatsApp Image 2026-03-25 at 7.40.53 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.54 PM (1).jpeg','./WhatsApp Image 2026-03-25 at 7.40.54 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.55 PM (1).jpeg','./WhatsApp Image 2026-03-25 at 7.40.55 PM (2).jpeg','./WhatsApp Image 2026-03-25 at 7.40.55 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.56 PM (1).jpeg','./WhatsApp Image 2026-03-25 at 7.40.56 PM (2).jpeg','./WhatsApp Image 2026-03-25 at 7.40.56 PM.jpeg','./WhatsApp Image 2026-03-25 at 7.40.57 PM (1).jpeg','./WhatsApp Image 2026-03-25 at 7.40.57 PM (2).jpeg','./WhatsApp Image 2026-03-25 at 7.40.57 PM.jpeg'
         ];
         
-        let validImages = []; // Will store only existing images
-        let isLoading = true;
-        const IMAGES_PER_PAGE = 10;
+        let validImages = [];
+        const IMAGES_PER_PAGE = 12; // Increased to 12 for better performance
         let currentPage = 0;
         let modalIndex = 0;
         
@@ -491,42 +411,63 @@
         const gridNext = document.getElementById('grid-next');
         const totalCountSpan = document.getElementById('total-count');
 
-        // Function to check if an image exists
-        function imageExists(url) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(true);
-                img.onerror = () => resolve(false);
-                img.src = url;
-            });
-        }
-
-        // Function to filter only existing images
-        async function filterExistingImages(imageList) {
+        // Optimized: Check images in parallel batches
+        async function filterExistingImagesParallel(imageList, batchSize = 20) {
             const existingImages = [];
             const totalImages = imageList.length;
             
-            // Show loading progress
-            gridContainer.innerHTML = `<div class="loading-indicator">Checking ${totalImages} images for availability...</div>`;
+            // Show initial loading message
+            gridContainer.innerHTML = `<div class="loading-indicator">Loading gallery (0/${totalImages})</div>`;
             
-            for (let i = 0; i < imageList.length; i++) {
-                const imgPath = imageList[i];
-                const exists = await imageExists(imgPath);
+            // Process in batches for better performance
+            for (let i = 0; i < imageList.length; i += batchSize) {
+                const batch = imageList.slice(i, Math.min(i + batchSize, imageList.length));
                 
-                if (exists) {
-                    existingImages.push(imgPath);
-                }
+                // Check all images in batch concurrently
+                const batchResults = await Promise.all(
+                    batch.map(imgPath => imageExists(imgPath))
+                );
                 
-                // Update progress every 10 images or at the end
-                if ((i + 1) % 10 === 0 || i === imageList.length - 1) {
-                    gridContainer.innerHTML = `<div class="loading-indicator">Checking images... ${i + 1}/${totalImages} completed<br>Found ${existingImages.length} valid images so far</div>`;
-                }
+                // Add valid images from this batch
+                batch.forEach((imgPath, idx) => {
+                    if (batchResults[idx]) {
+                        existingImages.push(imgPath);
+                    }
+                });
+                
+                // Update progress
+                const processed = Math.min(i + batchSize, totalImages);
+                gridContainer.innerHTML = `<div class="loading-indicator">Loading gallery (${processed}/${totalImages})<br>Found ${existingImages.length} images</div>`;
+                
+                // Small delay to keep UI responsive
+                await new Promise(resolve => setTimeout(resolve, 10));
             }
             
             return existingImages;
         }
 
-        // Render the grid with validated images
+        // Optimized image existence check with timeout
+        function imageExists(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const timeout = setTimeout(() => {
+                    img.src = '';
+                    resolve(false);
+                }, 2000); // 2 second timeout
+                
+                img.onload = () => {
+                    clearTimeout(timeout);
+                    resolve(true);
+                };
+                img.onerror = () => {
+                    clearTimeout(timeout);
+                    resolve(false);
+                };
+                img.src = url;
+            });
+        }
+
+        // Optimized rendering with skeleton loading
         function renderGrid() {
             if (validImages.length === 0) {
                 gridContainer.innerHTML = `
@@ -546,24 +487,34 @@
             const start = currentPage * IMAGES_PER_PAGE;
             const end = Math.min(start + IMAGES_PER_PAGE, validImages.length);
             
+            // Create skeleton loaders first
             for (let i = start; i < end; i++) {
                 const wrapper = document.createElement('div');
                 wrapper.classList.add('thumbnail-wrapper');
+                wrapper.style.position = 'relative';
+                
+                const skeleton = document.createElement('div');
+                skeleton.classList.add('skeleton');
                 
                 const thumb = document.createElement('img');
                 thumb.src = validImages[i];
                 thumb.alt = `Photo ${i + 1}`;
                 thumb.classList.add('thumbnail');
                 thumb.loading = 'lazy';
-                
-                // Add loading state
                 thumb.style.opacity = '0';
+                thumb.style.position = 'relative';
+                thumb.style.zIndex = '1';
+                
                 thumb.onload = () => {
                     thumb.style.opacity = '1';
+                    if (skeleton && skeleton.parentNode) {
+                        skeleton.remove();
+                    }
                 };
                 
                 thumb.onclick = () => openModal(i);
                 
+                wrapper.appendChild(skeleton);
                 wrapper.appendChild(thumb);
                 gridContainer.appendChild(wrapper);
             }
@@ -573,8 +524,7 @@
             gridPrev.disabled = currentPage === 0;
             gridNext.disabled = end >= validImages.length;
             
-            // Update total count display
-            totalCountSpan.innerHTML = `📸 Valid Images: <span class="valid-count">${validImages.length}</span> | Total Checked: ${originalImages.length}`;
+            totalCountSpan.innerHTML = `📸 ${validImages.length} beautiful memories captured ✨`;
         }
 
         function openModal(index) {
@@ -639,7 +589,6 @@
             document.body.removeChild(a);
         };
 
-        // Keyboard navigation
         document.onkeydown = (e) => {
             if (modal.style.display === 'flex') {
                 if (e.key === 'Escape') closeModal();
@@ -648,15 +597,26 @@
             }
         };
 
-        // Initialize - Check which images exist and display only valid ones
+        // Cache valid images in localStorage for faster subsequent loads
         async function initializeGallery() {
-            validImages = await filterExistingImages(originalImages);
-            isLoading = false;
+            // Check if we have cached results
+            const cached = localStorage.getItem('gallery_cache');
+            const cacheTime = localStorage.getItem('gallery_cache_time');
+            const now = Date.now();
             
-            if (validImages.length > 0) {
+            // Use cache if less than 1 hour old
+            if (cached && cacheTime && (now - parseInt(cacheTime)) < 3600000) {
+                validImages = JSON.parse(cached);
                 renderGrid();
             } else {
-                renderGrid(); // This will show empty state
+                // Load fresh
+                validImages = await filterExistingImagesParallel(originalImages, 25);
+                
+                // Cache the results
+                localStorage.setItem('gallery_cache', JSON.stringify(validImages));
+                localStorage.setItem('gallery_cache_time', now.toString());
+                
+                renderGrid();
             }
         }
         
